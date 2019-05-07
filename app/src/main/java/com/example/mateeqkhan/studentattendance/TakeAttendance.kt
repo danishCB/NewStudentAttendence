@@ -113,7 +113,7 @@ class TakeAttendance : AppCompatActivity() {
                 view = layoutInflater.inflate(R.layout.note, parent, false)
                 viewHolder = ViewHolder(view)
                 view!!.tag = viewHolder
-                Log.i("JSA", "set Tag for ViewHolder, position: " + position)
+                Log.i("JSA", "set Tag for ViewHolder,  position: " + position)
             } else {
                 view = convertView
                 viewHolder = view.tag as ViewHolder
