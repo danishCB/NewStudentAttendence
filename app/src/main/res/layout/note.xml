@@ -1,116 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="horizontal"
-    android:padding="10dp"
-    android:weightSum="10">
-    <LinearLayout
+    android:padding="10dp">
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="70dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="Name:"
-            android:layout_marginStart="4dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginLeft="5dp" />
-        <TextView
-            android:id="@+id/regno"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_marginStart="2dp"
-            android:text="Roll Number:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginLeft="5dp" />
-
-        <TextView
-            android:id="@+id/clssctn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="7dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="Semester:"
-            android:layout_marginLeft="5dp" />
-        <TextView
-            android:id="@+id/sct"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_marginStart="2dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="Session:"
-            android:layout_marginLeft="5dp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="9"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/studentName"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="70dp"
-            android:hint="0"
+            android:layout_alignBaseline="@+id/name"
+            android:layout_toRightOf="@+id/name"
             android:gravity="center"
+            android:hint="0"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:maxLines="1"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/regno"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
             android:padding="5dp"
-            android:textSize="18sp"
+            android:text="Roll Number:"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/rollNumber"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="70dp"
+            android:layout_below="@+id/name"
+            android:layout_alignBaseline="@+id/regno"
+            android:layout_toRightOf="@+id/regno"
             android:gravity="center"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
             android:hint="0"
+            android:textSize="15sp"
+            android:maxLines="1"/>
+
+
+        <TextView
+            android:id="@+id/clssctn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rollNumber"
             android:padding="5dp"
-            android:textSize="18sp"
+            android:text="Semester:"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/studentSemester"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="70dp"
+            android:layout_below="@+id/rollNumber"
+            android:layout_alignBaseline="@+id/clssctn"
+            android:layout_toRightOf="@+id/clssctn"
             android:gravity="center"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:hint="0"
+            android:textSize="15sp"
+            android:maxLines="1"/>
+
+        <TextView
+            android:id="@+id/sct"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/clssctn"
             android:padding="5dp"
-            android:textStyle="bold"
-            android:hint="0" />
+            android:text="Session:"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/studentSession"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="70dp"
-            android:hint="0"
+            android:layout_below="@+id/studentSemester"
+            android:layout_alignBaseline="@+id/sct"
+            android:layout_toRightOf="@+id/sct"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
             android:gravity="center"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-    <LinearLayout
+            android:hint="0"
+            android:textSize="15sp"
+            android:maxLines="1"/>
+
+    </RelativeLayout>
+
+
+    <!--<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginTop="17dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -118,48 +124,49 @@
             android:layout_width="60dp"
             android:layout_height="38dp"
             android:text="Present"
-            android:textStyle="bold"
-
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/lev"
             android:layout_width="60dp"
-            android:text="Leave"
-            android:textStyle="bold"
             android:layout_height="38dp"
-            />
+            android:text="Leave"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/Absnt"
             android:layout_width="60dp"
-            android:textStyle="bold"
-            android:text="Absent"
             android:layout_height="38dp"
-            />
-    </LinearLayout>
+            android:text="Absent"
+            android:textStyle="bold" />
+    </LinearLayout>-->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="15dp"
         android:orientation="vertical">
 
         <CheckBox
             android:id="@+id/chk1"
-            android:layout_width="30dp"
+            android:layout_width="100dp"
             android:layout_height="35dp"
-            />
+            android:layoutDirection="rtl"
+            android:text="Present" />
 
         <CheckBox
             android:id="@+id/chk2"
-            android:layout_width="30dp"
+            android:layout_width="100dp"
             android:layout_height="35dp"
-            />
+            android:layoutDirection="rtl"
+            android:text="Leave" />
+
         <CheckBox
             android:id="@+id/chk3"
-            android:layout_width="30dp"
+            android:layout_width="100dp"
             android:layout_height="35dp"
-            />
+            android:layoutDirection="rtl"
+            android:text="Absent" />
     </LinearLayout>
 
 </LinearLayout>

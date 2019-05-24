@@ -8,11 +8,8 @@ import android.content.Context
  */
 data class CustomListAlert(var context:Context?, var itemList: Array<String>, var alertTitle: String ) {
 
-
     fun showCustomAlert(completion: (CharSequence) -> Unit) {
         val builder = AlertDialog.Builder(context);
-
-
 
         builder.setTitle(alertTitle).setItems(itemList,
                 {
@@ -20,12 +17,8 @@ data class CustomListAlert(var context:Context?, var itemList: Array<String>, va
                     completion.invoke(itemList[itemIndex])
                     dialog.dismiss()
                 })
-
         builder.create().show()
 
     }
-
-
-
 
 }

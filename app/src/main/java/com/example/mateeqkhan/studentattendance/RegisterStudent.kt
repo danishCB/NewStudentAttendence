@@ -18,7 +18,7 @@ import java.util.*
 
 class RegisterStudent : AppCompatActivity() {
 
-   // private var dateOfBirth: EditText? = null
+    // private var dateOfBirth: EditText? = null
     internal lateinit var datePickerDialog: DatePickerDialog
     lateinit var usersDBHelper: UserDBHelper
 
@@ -71,48 +71,65 @@ class RegisterStudent : AppCompatActivity() {
         }
 
     }
-        fun addUser(v: View) {
-            this.hideKeyboard()
 
-            var studentName = this.studentName.text.toString()
-            var rollNumber = this.rollNumber.text.toString()
-            var dateOfBirth = this.dateOfBirth!!.text.toString()
-            var fatherName = this.fatherName.text.toString()
-            var contactNumber = this.contactNumber.text.toString()
-            var adress = this.adress.text.toString()
-            var bloodGroup = this.selectBloodGroup.text.toString()
-            var semester = this.selectSemester.text.toString()
-            var session = this.selectSession.text.toString()
+    fun addUser(v: View) {
+        this.hideKeyboard()
 
-            //  var dateOfBirth = this.dateOfBirth.text.toString()
-            usersDBHelper.insertUser(UserModel(studentname = studentName,dateOfBirth = dateOfBirth, rollnumber = rollNumber, fathername = fatherName, contactnumber = contactNumber, adress = adress, bloodgroup = bloodGroup, semester = semester, session = session))
+        var studentName = this.studentName.text.toString()
+        var rollNumber = this.rollNumber.text.toString()
+        var dateOfBirth = this.dateOfBirth!!.text.toString()
+        var fatherName = this.fatherName.text.toString()
+        var contactNumber = this.contactNumber.text.toString()
+        var adress = this.adress.text.toString()
+        var bloodGroup = this.selectBloodGroup.text.toString()
+        var semester = this.selectSemester.text.toString()
+        var session = this.selectSession.text.toString()
 
-            //clear all edittext s
-            this.dateOfBirth!!.setText("")
-            this.studentName.setText("")
-            this.rollNumber.setText("")
-            this.fatherName.setText("")
-            this.contactNumber.setText("")
-            this.adress.setText("")
-            this.selectBloodGroup.text = "Select Blood Group"
-            this.selectSemester.text = "Select Semester"
-            this.selectSession.text = "Select Section"
+        var registeredStudent = usersDBHelper.readAllUsers("")
 
 
-            Toast.makeText(applicationContext, "Successfully registered.", Toast.LENGTH_SHORT).show()
+        var userModel = UserModel()
 
-        }
+        userModel.studentId = registeredStudent.size + 1
+        userModel.studentname = studentName
+        userModel.dateOfBirth = dateOfBirth
+        userModel.rollnumber = rollNumber
+        userModel.fathername = fatherName
+        userModel.contactnumber = contactNumber
+        userModel.adress = adress
+        userModel.bloodgroup = bloodGroup
+        userModel.semester = semester
+        userModel.session = session
+
+        //  var dateOfBirth = this.dateOfBirth.text.toString()
+        usersDBHelper.insertUser(userModel)
+
+        //clear all edittext s
+        this.dateOfBirth!!.setText("")
+        this.studentName.setText("")
+        this.rollNumber.setText("")
+        this.fatherName.setText("")
+        this.contactNumber.setText("")
+        this.adress.setText("")
+        this.selectBloodGroup.text = "Select Blood Group"
+        this.selectSemester.text = "Select Semester"
+        this.selectSession.text = "Select Section"
+
+
+        Toast.makeText(applicationContext, "Successfully registered.", Toast.LENGTH_SHORT).show()
+
+    }
 
     fun hideKeyboard() {
         this.validateFields()
-        val inputManager:InputMethodManager =getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.SHOW_FORCED)
     }
 
     fun validateFields() {
         if (this.studentName.text.isEmpty() || this.fatherName.text.isEmpty() || this.dateOfBirth.text.isEmpty() || this.rollNumber.text.isEmpty() ||
                 this.contactNumber.text.isEmpty() || this.selectBloodGroup.text.isEmpty()
-                        || this.selectSemester.text.isEmpty() || this.selectSession.text.isEmpty()) {
+                || this.selectSemester.text.isEmpty() || this.selectSession.text.isEmpty()) {
             this.button_add_user.isEnabled = false
         } else {
             this.button_add_user.isEnabled = true

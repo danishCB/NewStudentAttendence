@@ -10,26 +10,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        title= "Home"
+        title = "Home"
 
-        val studententry : Button =findViewById(R.id.studententry)
-        val viewstudent : Button = findViewById(R.id.viewstudent)
-        val takeattendance : Button = findViewById(R.id.takeattendance)
+        val studententry: Button = findViewById(R.id.studententry)
+        val viewstudent: Button = findViewById(R.id.viewstudent)
+        val takeattendance: Button = findViewById(R.id.takeattendance)
 
         studententry.setOnClickListener {
             val intent = Intent(this, RegisterStudent::class.java)
             startActivity(intent)
         }
 
-            viewstudent.setOnClickListener {
-                val intent = Intent(this, ViewStudents::class.java)
-                startActivity(intent)
-            }
+        viewstudent.setOnClickListener {
+            val intent = Intent(this, ViewStudents::class.java)
+            startActivity(intent)
+        }
 
-                takeattendance.setOnClickListener {
-                    val intent = Intent(this,TakeAttendance::class.java)
-                    startActivity(intent)
-                }
+        takeattendance.setOnClickListener {
+            val intent = Intent(this, TakeAttendance::class.java)
+            startActivity(intent)
+        }
 
 
     }

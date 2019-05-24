@@ -1,4 +1,5 @@
 package com.example.mateeqkhan.studentattendance
+
 import android.content.Context
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -10,7 +11,8 @@ import android.view.ViewGroup
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_register_student.*
 import kotlinx.android.synthetic.main.activity_view_students.*
-
+import android.text.Editable
+import android.text.TextWatcher
 
 
 class ViewStudents : AppCompatActivity() {
@@ -26,10 +28,25 @@ class ViewStudents : AppCompatActivity() {
         title = "View Student"
 
         usersDBHelper = UserDBHelper(this)
-        registeredStudent = usersDBHelper.readAllUsers()
-
+        registeredStudent = usersDBHelper.readAllUsers(searchbox.text.toString())
         var notesAdapter = NotesAdapter(this, registeredStudent)
         lvNotes.adapter = notesAdapter
+        searchbox.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+                registeredStudent = usersDBHelper.readAllUsers(searchbox.text.toString())
+                notesAdapter.updatelist(registeredStudent)
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+            }
+        })
 
 
     }
@@ -68,6 +85,12 @@ class ViewStudents : AppCompatActivity() {
             return view
         }
 
+        fun updatelist(list: ArrayList<UserModel>) {
+            students.clear()
+            students.addAll(list)
+            this.notifyDataSetChanged()
+        }
+
         override fun getItem(position: Int): Any {
             return students[position]
         }
@@ -103,7 +126,6 @@ class ViewStudents : AppCompatActivity() {
     }
 
 
-
 //    fun searchStudent(v: View) {
 //        var users = usersDBHelper.readAllUsers()
 //        this.ll_entries.removeAllViews()
@@ -130,10 +152,6 @@ class ViewStudents : AppCompatActivity() {
 //        this.textview_result.text = "Deleted user : " + result
 //        this.ll_entries.removeAllViews()
 //    }
-
-
-
-
 
 
 //    fun showAllUsers(v: View) {
