@@ -148,21 +148,21 @@
         android:orientation="vertical">
 
         <CheckBox
-            android:id="@+id/chk1"
+            android:id="@+id/presentChk"
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layoutDirection="rtl"
             android:text="Present" />
 
         <CheckBox
-            android:id="@+id/chk2"
+            android:id="@+id/leaveChk"
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layoutDirection="rtl"
             android:text="Leave" />
 
         <CheckBox
-            android:id="@+id/chk3"
+            android:id="@+id/absentChk"
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layoutDirection="rtl"

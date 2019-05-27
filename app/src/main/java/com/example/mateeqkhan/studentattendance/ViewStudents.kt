@@ -48,7 +48,6 @@ class ViewStudents : AppCompatActivity() {
             }
         })
 
-
     }
 
     inner class NotesAdapter : BaseAdapter {

@@ -71,7 +71,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
     @Throws(SQLiteConstraintException::class)
-    fun insertUserAttendence(userAttendenceList: UserAttendenceModel/*userAttendence: UserAttendenceModel*/): Boolean {
+    fun insertUserAttendence(userAttendenceList: UserAttendenceModel/*userAttendence: UserAttendenceModel*/, update: Boolean): Boolean {
         // Gets the data repository in write mode
         val db = writableDatabase
 
@@ -82,20 +82,23 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         values.put(DBContract.UserAttendence.COLUMN_STUDENT_NAME, userAttendenceList.studentname)
         values.put(DBContract.UserAttendence.COLUMN_REGISTER_NUMBER, userAttendenceList.rollnumber)
         values.put(DBContract.UserAttendence.COLUMN_REGISTER_NUMBER, userAttendenceList.rollnumber)
-        values.put(DBContract.UserAttendence.COLUNN_DATE_OF_BIRTH, userAttendenceList.dateOfBirth)
+        values.put(DBContract.UserAttendence.COLUMN_DATE_OF_BIRTH, userAttendenceList.dateOfBirth)
         values.put(DBContract.UserAttendence.COLUMN_FATHER_NAME, userAttendenceList.fathername)
         values.put(DBContract.UserAttendence.COLUMN_CONTACT_NUMBER, userAttendenceList.contactnumber)
         values.put(DBContract.UserAttendence.COLUMN_ADRESS, userAttendenceList.adress)
         values.put(DBContract.UserAttendence.COLUMN_BLOOD_GROUP, userAttendenceList.bloodgroup)
-        values.put(DBContract.UserAttendence.COLUNN_SEMESTER, userAttendenceList.semester)
+        values.put(DBContract.UserAttendence.COLUMN_SEMESTER, userAttendenceList.semester)
         values.put(DBContract.UserAttendence.COLUMN_SESSION, userAttendenceList.session)
         values.put(DBContract.UserAttendence.COLUMN_ATTENDENCE_DATE, userAttendenceList.attendencedate)
         values.put(DBContract.UserAttendence.COLUMN_STUDENT_PRESENT, userAttendenceList.present)
         values.put(DBContract.UserAttendence.COLUMN_STUDENT_LEAVE, userAttendenceList.leave)
         values.put(DBContract.UserAttendence.COLUMN_STUDENT_ABSENT, userAttendenceList.absent)
 
-        val newRowId = db.insert(DBContract.UserAttendence.TABLE_NAME_ATTENDENCE, null, values)
 
+        if (update)
+            db.update(DBContract.UserAttendence.TABLE_NAME_ATTENDENCE, values, DBContract.UserAttendence.COLUMN_STUDENT_ID + "=" + userAttendenceList.studentId, null)
+        else
+            db.insert(DBContract.UserAttendence.TABLE_NAME_ATTENDENCE, null, values)
         // values.put(DBContract.UserEntry.COLUMN_AGE, user.age)
 
         // Insert the new row, returning the primary key value of the new row
@@ -124,7 +127,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
             if (session.isNotEmpty() && semester.isNotEmpty()) {
                 cursor = db.rawQuery("SELECT * FROM " + DBContract.UserEntry.TABLE_NAME + " WHERE "
-                        + DBContract.UserEntry.COLUMN_SESSION + "='" + session + "' AND " + DBContract.UserEntry.COLUNN_SEMESTER + "='" + semester + "'"
+                        + DBContract.UserEntry.COLUMN_SESSION + "='" + session + "' AND " + DBContract.UserEntry.COLUMN_SEMESTER + "='" + semester + "'"
                         , null)
             } else {
                 cursor = db.rawQuery("select * from " + DBContract.UserEntry.TABLE_NAME + " WHERE "
@@ -153,9 +156,12 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         var cursor: Cursor? = null
         try {
             if (date.isNotEmpty()) {
-                cursor = db.rawQuery("SELECT * FROM " + DBContract.UserAttendence.TABLE_NAME_ATTENDENCE/* + " WHERE "
-                        + DBContract.UserAttendence.COLUMN_SESSION + "='" + "2012-16" + "' AND " + DBContract.UserAttendence.COLUNN_SEMESTER + "='" + semester
-                        + "' AND " + DBContract.UserAttendence.COLUMN_ATTENDENCE_DATE + "='" + date + "'"*/, null)
+                cursor = db.rawQuery("SELECT * FROM " + DBContract.UserAttendence.TABLE_NAME_ATTENDENCE + " WHERE ("
+                        + DBContract.UserAttendence.COLUMN_SESSION + "='" + session + "' AND " + DBContract.UserAttendence.COLUMN_SEMESTER + "='" + semester
+                        + "') AND (" + DBContract.UserAttendence.COLUMN_ATTENDENCE_DATE + "='$date')", null)
+                /*  cursor = db.rawQuery("SELECT * FROM " + DBContract.UserAttendence.TABLE_NAME_ATTENDENCE + " WHERE ("
+                          *//*  + DBContract.UserAttendence.COLUMN_SESSION + "='" + session + "' AND " + DBContract.UserAttendence.COLUNN_SEMESTER + "='" + semester
+                          + "') AND (" *//* + DBContract.UserAttendence.COLUMN_ATTENDENCE_DATE + "='" + date + "')", null)*/
             }
         } catch (e: SQLiteException) {
             // if table not yet present, create it
@@ -206,24 +212,24 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 DBContract.UserEntry.COLUMN_STUDENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 DBContract.UserEntry.COLUMN_STUDENT_NAME + " TEXT ," +
                 DBContract.UserEntry.COLUMN_REGISTER_NUMBER + " TEXT," +
-                DBContract.UserEntry.COLUNN_DATE_OF_BIRTH + " TEXT," +
+                DBContract.UserEntry.COLUMN_DATE_OF_BIRTH + " TEXT," +
                 DBContract.UserEntry.COLUMN_FATHER_NAME + " TEXT," +
                 DBContract.UserEntry.COLUMN_CONTACT_NUMBER + " TEXT," +
                 DBContract.UserEntry.COLUMN_ADRESS + " TEXT," +
                 DBContract.UserEntry.COLUMN_BLOOD_GROUP + " TEXT," +
-                DBContract.UserEntry.COLUNN_SEMESTER + " TEXT," +
+                DBContract.UserEntry.COLUMN_SEMESTER + " TEXT," +
                 DBContract.UserEntry.COLUMN_SESSION + " TEXT)"
 
         private val SQL_CREATE_ATEENDENCE = "CREATE TABLE " + DBContract.UserAttendence.TABLE_NAME_ATTENDENCE + " (" +
                 DBContract.UserAttendence.COLUMN_STUDENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 DBContract.UserAttendence.COLUMN_STUDENT_NAME + " TEXT ," +
                 DBContract.UserAttendence.COLUMN_REGISTER_NUMBER + " TEXT," +
-                DBContract.UserAttendence.COLUNN_DATE_OF_BIRTH + " TEXT," +
+                DBContract.UserAttendence.COLUMN_DATE_OF_BIRTH + " TEXT," +
                 DBContract.UserAttendence.COLUMN_FATHER_NAME + " TEXT," +
                 DBContract.UserAttendence.COLUMN_CONTACT_NUMBER + " TEXT," +
                 DBContract.UserAttendence.COLUMN_ADRESS + " TEXT," +
                 DBContract.UserAttendence.COLUMN_BLOOD_GROUP + " TEXT," +
-                DBContract.UserAttendence.COLUNN_SEMESTER + " TEXT," +
+                DBContract.UserAttendence.COLUMN_SEMESTER + " TEXT," +
                 DBContract.UserAttendence.COLUMN_SESSION + " TEXT," +
                 DBContract.UserAttendence.COLUMN_ATTENDENCE_DATE + " TEXT ," +/*
                 DBContract.UserAttendence.COLUMN_STUDENT_TOTAL_STRENGTH + " INTEGER," +

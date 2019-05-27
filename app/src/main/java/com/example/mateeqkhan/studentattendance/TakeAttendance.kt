@@ -18,6 +18,8 @@ class TakeAttendance : AppCompatActivity() {
 
     private var filteredStudents = ArrayList<UserAttendenceModel>()
     lateinit var usersDBHelper: UserDBHelper
+    private var studentListAttendence = ArrayList<UserAttendenceModel>()
+
     var semesterList = arrayOf("Semseter 1", "Semseter 2", "Semseter 3", "Semseter 4", "Semseter 5", "Semseter 6", "Semseter 7", "Semseter 8")
     var semesterYears = arrayOf("2011-15", "2012-16", "2013-17", "2014-18", "2015-19", "2016-20", "2017-21", "2018-22", "2019-23", "2020-24", "2021-25", "2022-26", "2023-27", "2024-28", "2025-29", "2026-30")
     var saveAttendenceInfo: HashMap<Integer, String> = HashMap()
@@ -56,11 +58,15 @@ class TakeAttendance : AppCompatActivity() {
 
         saveAttendence.setOnClickListener {
             for (i in 0 until filteredStudents.size) {
-                usersDBHelper.insertUserAttendence(filteredStudents[i])
+                if (studentListAttendence.size != 0)
+                    usersDBHelper.insertUserAttendence(filteredStudents[i], true)
+                else
+                    usersDBHelper.insertUserAttendence(filteredStudents[i], false)
+
+
             }
         }
     }
-
 
     fun filterStudentList() {
 
@@ -104,7 +110,9 @@ class TakeAttendance : AppCompatActivity() {
     inner class StudentAdapter : BaseAdapter {
 
         private var studentList = ArrayList<UserModel>()
+/*
         private var studentListAttendence = ArrayList<UserAttendenceModel>()
+*/
         private var context: Context? = null
 
         constructor(notesList: ArrayList<UserModel>, context: Context) : super() {
@@ -113,7 +121,7 @@ class TakeAttendance : AppCompatActivity() {
         }
 
         constructor(context: Context, notesListAttendence: ArrayList<UserAttendenceModel>) : super() {
-            this.studentListAttendence = notesListAttendence
+            studentListAttendence = notesListAttendence
             this.context = context
         }
 
@@ -136,6 +144,19 @@ class TakeAttendance : AppCompatActivity() {
                 viewHolder.studentRollNumber.text = studentListAttendence[position].rollnumber
                 viewHolder.studentSemester.text = studentListAttendence[position].semester
                 viewHolder.studentSession.text = studentListAttendence[position].session
+                if (studentListAttendence[position].absent == "Absent") {
+                    viewHolder.presentCheck.isChecked = false
+                    viewHolder.leaveCheck.isChecked = false
+                    viewHolder.absentCheck.isChecked = true
+                } else if (studentListAttendence[position].present == "Present") {
+                    viewHolder.presentCheck.isChecked = true
+                    viewHolder.leaveCheck.isChecked = false
+                    viewHolder.absentCheck.isChecked = false
+                } else {
+                    viewHolder.presentCheck.isChecked = false
+                    viewHolder.leaveCheck.isChecked = true
+                    viewHolder.absentCheck.isChecked = false
+                }
 
             } else {
                 viewHolder.name.text = studentList[position].studentname
@@ -144,10 +165,10 @@ class TakeAttendance : AppCompatActivity() {
                 viewHolder.studentSession.text = studentList[position].session
             }
 
-            // if (viewHolder.chk1.isChecked || viewHolder.chk2.isChecked || viewHolder.chk3.isChecked) {
+            // if (viewHolder.presentCheck.isChecked || viewHolder.leaveCheck.isChecked || viewHolder.absentCheck.isChecked) {
 
-            if (studentListAttendence.size != 0) {
-                for (i in 0 until studentList.size) {
+            if (studentListAttendence.size != 0 && (studentListAttendence.size != filteredStudents.size)) {
+                for (i in 0 until studentListAttendence.size) {
                     userAttendenceModel = UserAttendenceModel()
                     userAttendenceModel?.studentId = studentListAttendence[i].studentId
                     userAttendenceModel?.semester = studentListAttendence[i].semester
@@ -195,47 +216,51 @@ class TakeAttendance : AppCompatActivity() {
             }
             //}
 
-            viewHolder.chk1.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewHolder.presentCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    viewHolder.chk2.isChecked = false
-                    viewHolder.chk3.isChecked = false
+                    viewHolder.leaveCheck.isChecked = false
+                    viewHolder.absentCheck.isChecked = false
                     filteredStudents[position].present = "Present"
                     filteredStudents[position].absent = ""
                     filteredStudents[position].leave = ""
                 } else
-                    viewHolder.chk1.isChecked = false
+                    viewHolder.presentCheck.isChecked = false
                 //filteredStudents.remove(filteredStudents[position])
                 // notifyDataSetChanged()
             }
-            viewHolder.chk2.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewHolder.leaveCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    viewHolder.chk1.isChecked = false
-                    viewHolder.chk3.isChecked = false
+                    viewHolder.presentCheck.isChecked = false
+                    viewHolder.absentCheck.isChecked = false
                     filteredStudents[position].leave = "Leave"
                     filteredStudents[position].absent = ""
                     filteredStudents[position].present = ""
                 } else
-                    viewHolder.chk2.isChecked = false
+                    viewHolder.leaveCheck.isChecked = false
                 //filteredStudents.remove(filteredStudents[position])
                 // notifyDataSetChanged()
             }
-            viewHolder.chk3.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewHolder.absentCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    viewHolder.chk1.isChecked = false
-                    viewHolder.chk2.isChecked = false
+                    viewHolder.presentCheck.isChecked = false
+                    viewHolder.leaveCheck.isChecked = false
                     filteredStudents[position].leave = ""
                     filteredStudents[position].present = ""
                     filteredStudents[position].absent = "Absent"
                 } else
-                    viewHolder.chk3.isChecked = false
+                    viewHolder.absentCheck.isChecked = false
                 // filteredStudents.remove(filteredStudents[position])
                 //  notifyDataSetChanged()
             }
 
 
-//            vh.chk1.text = notesList[position].content
+//            vh.presentCheck.text = notesList[position].content
 
             return view
+        }
+
+        fun addlist(list: ArrayList<Any>) {
+
         }
 
         override fun getItem(position: Int): Any {
@@ -264,18 +289,18 @@ class TakeAttendance : AppCompatActivity() {
         val studentRollNumber: TextView
         val studentSemester: TextView
         val studentSession: TextView
-        val chk1: CheckBox
-        val chk2: CheckBox
-        val chk3: CheckBox
+        val presentCheck: CheckBox
+        val leaveCheck: CheckBox
+        val absentCheck: CheckBox
 
         init {
             name = view?.findViewById<TextView>(R.id.studentName) as TextView
             studentRollNumber = view?.findViewById<TextView>(R.id.rollNumber) as TextView
             studentSemester = view?.findViewById<TextView>(R.id.studentSemester) as TextView
             studentSession = view?.findViewById<TextView>(R.id.studentSession) as TextView
-            chk1 = view?.findViewById<TextView>(R.id.chk1) as CheckBox
-            chk2 = view?.findViewById<TextView>(R.id.chk2) as CheckBox
-            chk3 = view?.findViewById<TextView>(R.id.chk3) as CheckBox
+            presentCheck = view?.findViewById<TextView>(R.id.presentChk) as CheckBox
+            leaveCheck = view?.findViewById<TextView>(R.id.leaveChk) as CheckBox
+            absentCheck = view?.findViewById<TextView>(R.id.absentChk) as CheckBox
 
 
         }
