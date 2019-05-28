@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.view.autofill.AutofillId
 import java.util.ArrayList
 import java.nio.file.Files.size
+import android.database.DatabaseUtils
 
 
 /**import android.content.ContentValues
@@ -46,7 +47,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     @Throws(SQLiteConstraintException::class)
     fun insertUser(user: UserModel): Boolean {
         // Gets the data repository in write mode
-        val db = writableDatabase
+        val db = this.writableDatabase
 
         // Create a new map of values, where column names are the keys
         val values = UserModel.userValues(user)
@@ -66,6 +67,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = db.insert(DBContract.UserEntry.TABLE_NAME, null, values)
+        db.close()
 
         return true
     }
@@ -78,7 +80,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         // Create a new map of values, where column names are the keys
 
         val values = ContentValues()
-        values.put(DBContract.UserAttendence.COLUMN_STUDENT_ID, userAttendenceList.studentId)
+        //values.put(DBContract.UserAttendence.COLUMN_STUDENT_ID, userAttendenceList.studentId)
         values.put(DBContract.UserAttendence.COLUMN_STUDENT_NAME, userAttendenceList.studentname)
         values.put(DBContract.UserAttendence.COLUMN_REGISTER_NUMBER, userAttendenceList.rollnumber)
         values.put(DBContract.UserAttendence.COLUMN_REGISTER_NUMBER, userAttendenceList.rollnumber)
@@ -100,6 +102,7 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         else
             db.insert(DBContract.UserAttendence.TABLE_NAME_ATTENDENCE, null, values)
         // values.put(DBContract.UserEntry.COLUMN_AGE, user.age)
+        db.close()
 
         // Insert the new row, returning the primary key value of the new row
         return true
@@ -148,6 +151,13 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             }
         }
         return users
+    }
+
+    fun getProfilesCount(): Long {
+        val db = this.readableDatabase
+        val count = DatabaseUtils.queryNumEntries(db, DBContract.UserAttendence.TABLE_NAME_ATTENDENCE)
+        db.close()
+        return count
     }
 
     fun readAttendenceUser(studentname: String = "", session: String = "", semester: String = "", date: String = ""): ArrayList<UserAttendenceModel> {

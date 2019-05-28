@@ -45,7 +45,6 @@ class DBTable(val name: String, val columns: Array<Colomns>) {
 
     fun dropQuery(): String = "DROP TABLE IF EXISTS ${name}"
 
-
 }
 
 
