@@ -77,6 +77,7 @@ class TakeAttendance : AppCompatActivity() {
         var students: ArrayList<UserAttendenceModel> = usersDBHelper.readAttendenceUser("", slccls.text.toString(), slcsmstr.text.toString(), edtdat.text.toString())
         var student: ArrayList<UserModel> = ArrayList()
         if (students == null || students.size == 0) {
+            saveAttendence.setText("Save")
             student = usersDBHelper.readUser("", slccls.text.toString(), slcsmstr.text.toString(), edtdat.text.toString())
             var studentAdapter = StudentAdapter(student, this)
             lvNotes.adapter = studentAdapter
@@ -105,16 +106,20 @@ class TakeAttendance : AppCompatActivity() {
 
             } else {
                 edtdat.setText(calenderDay.date.toString())
-                studentListAttendence.removeAll(studentListAttendence)
-                studentList.removeAll(studentList)
-                filteredStudents.removeAll(filteredStudents)
-                totalPresent = 0
-                totalLeave = 0
-                totalAbsent = 0
+                clearValues()
                 filterStudentList()
                 Toast.makeText(applicationContext, "calenderDay: $calenderDay", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun clearValues() {
+        studentListAttendence.removeAll(studentListAttendence)
+        studentList.removeAll(studentList)
+        filteredStudents.removeAll(filteredStudents)
+        totalPresent = 0
+        totalLeave = 0
+        totalAbsent = 0
     }
 
     inner class StudentAdapter : BaseAdapter {
@@ -253,9 +258,7 @@ class TakeAttendance : AppCompatActivity() {
                     viewHolder.presentCheck.isChecked = false
                     totalPresent = totalPresent - 1
                 }
-                edtprst.setText(totalPresent.toString())
-                //filteredStudents.remove(filteredStudents[position])
-                // notifyDataSetChanged()
+                setAttendenceValue()
             }
             viewHolder.leaveCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
@@ -268,10 +271,9 @@ class TakeAttendance : AppCompatActivity() {
                 } else {
                     viewHolder.leaveCheck.isChecked = false
                     totalLeave = totalLeave - 1
-                    //filteredStudents.remove(filteredStudents[position])
-                    // notifyDataSetChanged()
                 }
-                editText2.setText(totalAbsent.toString() + "/" + totalLeave.toString())
+                //   editText2.setText(totalAbsent.toString() + "/" + totalLeave.toString())
+                setAttendenceValue()
             }
             viewHolder.absentCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
@@ -284,10 +286,8 @@ class TakeAttendance : AppCompatActivity() {
                 } else {
                     viewHolder.absentCheck.isChecked = false
                     totalAbsent = totalAbsent - 1
-                }// filteredStudents.remove(filteredStudents[position])
-                //  notifyDataSetChanged()
-                //    editText2.setText(totalAbsent.toString() + "/" + totalLeave.toString())
-                editText2.setText(totalAbsent.toString() + "/" + totalLeave.toString())
+                }
+                setAttendenceValue()
             }
 
 
@@ -305,14 +305,20 @@ class TakeAttendance : AppCompatActivity() {
 
         fun getAttendenceInfo() {
             for (i in 0 until studentListAttendence.size) {
-                if (studentListAttendence[i].absent == "Absent") {
-                    totalAbsent = totalAbsent + 1
-                } else if (studentListAttendence[i].present == "Present") {
-                    totalPresent = totalPresent + 1
-                } else {
-                    totalLeave = totalLeave + 1
+                if (studentListAttendence.size != filteredStudents.size) {
+                    if (studentListAttendence[i].absent == "Absent") {
+                        totalAbsent = totalAbsent + 1
+                    } else if (studentListAttendence[i].present == "Present") {
+                        totalPresent = totalPresent + 1
+                    } else {
+                        totalLeave = totalLeave + 1
+                    }
                 }
             }
+            setAttendenceValue()
+        }
+
+        fun setAttendenceValue() {
             edtprst.setText(totalPresent.toString())
             editText2.setText(totalAbsent.toString() + "/" + totalLeave.toString())
         }

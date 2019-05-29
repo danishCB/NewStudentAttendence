@@ -90,7 +90,7 @@ class RegisterStudent : AppCompatActivity() {
 
         var userModel = UserModel()
 
-        userModel.studentId = registeredStudent.size + 1
+        userModel.studentId = registeredStudent[registeredStudent.size-1].studentId + 1
         userModel.studentname = studentName
         userModel.dateOfBirth = dateOfBirth
         userModel.rollnumber = rollNumber

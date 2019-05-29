@@ -11,6 +11,7 @@ import android.view.autofill.AutofillId
 import java.util.ArrayList
 import java.nio.file.Files.size
 import android.database.DatabaseUtils
+import java.nio.file.Files.delete
 
 
 /**import android.content.ContentValues
@@ -158,6 +159,12 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val count = DatabaseUtils.queryNumEntries(db, DBContract.UserAttendence.TABLE_NAME_ATTENDENCE)
         db.close()
         return count
+    }
+
+    fun deleteStudents(id: Int) {
+        val db = this.writableDatabase
+        db.delete(DBContract.UserEntry.TABLE_NAME, DBContract.UserEntry.COLUMN_STUDENT_ID + "=" + id, null) > 0
+        db.close()
     }
 
     fun readAttendenceUser(studentname: String = "", session: String = "", semester: String = "", date: String = ""): ArrayList<UserAttendenceModel> {

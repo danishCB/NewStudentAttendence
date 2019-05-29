@@ -81,6 +81,15 @@ class ViewStudents : AppCompatActivity() {
             vh.semester.text = students[position].semester
             vh.session.text = students[position].session
             vh.contactNumber.text = students[position].contactnumber
+
+            vh.deleteStudent.setOnClickListener {
+                var id = students[position].studentId
+                usersDBHelper.deleteStudents(students[position].studentId)
+                Toast.makeText(applicationContext, "User Deleted", Toast.LENGTH_SHORT).show()
+                registeredStudent = usersDBHelper.readAllUsers(searchbox.text.toString())
+                updatelist(registeredStudent)
+            }
+
             return view
         }
 
@@ -110,6 +119,7 @@ class ViewStudents : AppCompatActivity() {
         val semester: TextView
         val session: TextView
         val contactNumber: TextView
+        val deleteStudent: ImageView
 
         init {
             this.studentName = view?.findViewById<EditText>(R.id.studentName) as TextView
@@ -118,6 +128,7 @@ class ViewStudents : AppCompatActivity() {
             this.semester = view?.findViewById<TextView>(R.id.semester) as TextView
             this.session = view?.findViewById<TextView>(R.id.session) as TextView
             this.contactNumber = view?.findViewById<TextView>(R.id.contactNumber) as TextView
+            this.deleteStudent = view?.findViewById<ImageView>(R.id.deleteStudent) as ImageView
 
         }
 
